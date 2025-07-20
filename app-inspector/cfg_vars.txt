@@ -1,0 +1,20 @@
+#
+# enthält globale Variable, die
+# in muster.cfg gesichert werden
+#
+
+
+::utils::suchen::findDirection
+::utils::suchen::findIgnoreCase
+::utils::suchen::findString
+::utils::suchen::findType
+
+::ttk::dialog::file::__ttk_filedialog(selectPath)
+::ttk::dialog::file::opt(-hidden)
+::ttk::dialog::file::opt(-details)
+::ttk::dialog::file::opt(-filetype)
+::ttk::dialog::file::opt(-foldersfirst)
+::ttk::dialog::file::opt(-reverse)
+::ttk::dialog::file::opt(-sepfolders)
+::ttk::dialog::file::opt(-sort)
+::ttk::dialog::file::opt(-typevariable)

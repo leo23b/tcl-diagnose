@@ -1,0 +1,435 @@
+// 08.07.2025 komplett überarbeitet
+// 13.08.2024 ased5 dnd Proc
+// 14.09.2023 umgestllt auf adoc
+// 09.06.2023 Trace beschrieben
+// 24.05.2023 Canvas ergänzt
+// 04.09.2021 Trace ergänzt, Umstellung auf utf-8
+// 26.03.2016 neu
+
+= inspector
+
+*-Diagnose und Test von Tcl/Tk-Programmen -*
+
+:revdate:    08.07.2025
+:revnumber:  3.0
+:Key words: Diagnose Trace Inspection TclTk-Programme
+
+
+:toc: left
+:toc-title: Inhaltsverzeichnis
+:toclevels: 3
+:numbered: 
+:icons:     image
+:encoding:  utf-8 
+:imagesdir: images
+:data-uri:
+:doctype:   book
+
+== Änderungen
+
+.08.Juli 2025 Version 3.0
+    * komplett überarbeitet
+
+.24.Mai 2023 Version 2.0
+
+   * Trace und Canvas ergänzt
+
+
+.25.März 2016 Version 1.0
+
+   * Doku neu verfasst
+
+    
+
+
+== Einleitung
+
+Das Programm _tcl-inspector_ -kurz *inspector* - kann die Strukturen eines Tcl/Tk-Programms - der _Testling_ - komfortabel untersuchen und ändern. Diese Strukturen oder Klassen sind Widgets, Proceduren, globale Variable , Fonts usw. Die Änderungen erfolgen im RAM des Testlings und wirken sofort, die Programmquellen bleiben unverändert.
+
+_inspector_ ist gut geeignet zum Programmtest.
+Im Testling kann man Prozeduren anpassen, globale Variable kontrollieren und ändern oder Tracepunkte setzen.
+
+Der _inspector_ ist eine Weiterentwicklung des ehemaligen Programms _tkinspect_.
+
+Um einen ersten Eindruck von den Fähigkeiten des Programms zu bekommen, kann man dazu inspector auf sich selbst anwenden:
+
+image:demo.png[]
+
+Mit gedrückter Maustaste zieht man den Programmtitel in das _Drop Here_-Feld.
+
+
+
+== Verbindung Testling - inspector
+
+Der inspector benötigt zur Diagnose eine _Verbindung_ zum Testling.
+
+====
+NOTE: Mit dem _send-Kommando_ könnte der inspector _direkt_ mit dem Testling kommunizieren. Sicherheitstechnisch ist dies äußerst problematisch und deshalb nicht implementiert.
+====
+
+Zur Kontaktaufnahme sind zwei Bedingungen erforderlich
+
+====
+- der _Testling_ muss einen Port einrichten
+- der _inspector_ muss diese Portnummer kennen
+====
+
+Eine komfortable Lösung bietet die _DragNDrop_-Methode (siehe Muster testling2.tcl im Verzeichnis _test_ in den Inspector-Quellen):
+
+Der Testling legt eine _Drag-Quelle_ an, z.B ein Label mit dem Programmtitel. Beim Ziehen dieses Label mit gedrückter Maustaste wird im Testling ein Port angelegt. Dann lässt man das Label im Inspector in das vorbereitete _Drop_-Ziel `Drop here` fallen. Dabei wird die Portnummer an den Inspector übergeben.
+
+Hierbei sind die packages ::comm::comm und tkdnd notwendig. Beide sind in den Inpector-Quellen enthalten, zumindest für die Betriebssysteme Linux und Solaris.
+
+Eine einfachere Variante ohne tkdnd zeigt testling1.tcl. Hier wird im Testling mit ::comm::comm ein Port angelegt und über _stdout_ protokolliert.
+
+Diese Portnummer kann beim Start des inspectors mitgegeben werden:
+
+  $inspector -port 12345
+  
+oder über das Verbindungsdialog eingegeben werden:
+
+image::verbindungsdialog.png[]
+
+=== Script starttestling.tcl
+
+Wenn man das Tcl/TK-Programm wie oben beschrieben nicht verändern will, kann man stattdessen mit einem Script den Testling starten:
+
+ $wish startTestling.tcl <pfadTestling>
+
+Der Testlingpfad kann eine _kit_-Datei oder der Hauptmodul des Testlings sein, z.B. 
+
+   tkinspect-master/tkinspect.tcl
+
+NOTE: Sas Script liegt im Quellverzeichnis des inspectors und muss auch in diesem Verzeichnis gestartet werden.
+
+Im Script wird mit _comm_ ein Port angelegt und anschliessend der Testling gestartet. Die ausgegebene _Portnummer_ muss man in das Verbindungsmenu des inspectors übergeben.
+
+== Gliederung der grafischen Oberfläche
+
+Neben den Funktionstasten am oberen Ende besteht die Öberfläche im wesentlichen aus dem _Auswahlfenster_ oben und dem _Inhaltefenster_ darunter:
+
+image::overview.png[]
+
+Am unteren Ende der Oberfläche 
+
+image::send_an_testling.png[]
+
+kann man tcl/Tk-Kommandos an den Testling schicken, das Ergebnis erscheint darunter. Über die _Pfeiltaste_ ganz rechts kann man vergangene Kommandos wieder hervor holen.
+
+=== Auswahlfenster
+
+Die Auswahlfenster von allen Klassen außer der Widgetklasse haben gleiches Aussehen und ähnliche Funktionen. Der Widgetbaum und das zugehörige Inhaltfenster werden separat beschrieben.
+
+image:auswahlfenster.png[]
+
+Über die Register oberhalb des Auswahlfenster wird eine  Struktur oder Klasse ausgewählt danach erscheint eine Liste aller Elemente dieser Klasse.
+
+Über die rechte Maustaste lässt sich ein _Popup-Menu_ anzeigen, die Funktionen sind klassenspezifisch und erklären sich aus dem Kontext.
+
+==== Aktualisierung des Auswahlfensters
+
+Die Auswahlfenster von allen Klassen werden beim ersten Kontakt mit dem Testling aktualisiert. Änderungen im Testling werden nicht automatisch angezeigt. Die Widgets eines Dialogfenster sind erst im Widgetbaum enthalten, nachdem der Dialog zum ersten Mal angezeigt wurde. Ähnliches gilt für Prozeduren, die erst bekannt sind, nachdem der Just-in-Time-Compiler sie übersetzt hat.
+
+TIP: Alle Auswahlfenster können über die Popup-Funktion *Update Liste* aktualisiert werden
+
+=== Suchen in der Auswahlliste
+
+In jeder Auswahlliste gibt es ein _Anzeigefilter_, mit dem man die Anzahl der angezeigten Elemente einschränken kann. Die Anpassung der Filter ist etwas unhandlich, besser geeignet ist die _Suchfunktion_.
+
+Unterhalb von den Elementen gibt es eine Filterzeile zur Eingabe eines Suchmusters und eine Such- und Löschtaste.
+
+Das Suchmuster ignoriert die Gross/Kleinschreibung. Die Suchtaste oder die Returntaste zeigt das erste Element, in dem das Suchmuster enthalten ist. Weiteres Suchen zeigen folgende passende Elemente. Am Ende der Liste wird wieder zum Anfang gesprungen.
+
+=== Auswahlliste filtern
+
+image:filterliste.png[]
+
+Jede Klasse hat eine eigenes Anzeigefilter. Es wird über das Popup-Menu angezeigt und geändert.
+Man kann Suchmuster (pattern) einfügen oder löschen. Vorhandene Muster werden auf der linken Seite angezeigt.
+Über zwei Radiotasten können Elemente angezeigt oder ausgeschlossen werden. 
+Die _Apply_-Taste filtert die Liste.
+
+Im angezeigten Filter werden alle Ellemente angezeigt, die mit
+::B oder ::A oder ::Connec beginnen.
+
+=== Inhaltefenster
+
+Nach Elementauswahl mit der Maus erscheint im Inhaltefenster der Elementinhalt, im Beispiel die ausgewählte Prozedur:
+
+image:inhaltefenster.png[]
+
+Die Anzeige im Inhaltefenster ist als _tcl/Tk-Kommando_ formatiert und kann nach einer Änderung mit der _Sendetaste image:inhalt_senden.png[] 
+an den Testling geschickt werden. Dies gilt für alle Klassen.
+
+Neben der Sendetaste wird der Elementname angezeigt. Über die Pfeiltaste rechts vom Namen kann die Historie der ehemals angezeigten Elemente angewählt werden:
+
+image::inhalt_historie.png[]
+
+Wird das Element verändert, wird mit der roten Sendetaste daran erinnert, dass das Versenden noch aussteht:
+
+image:sendetaste_rot.png[]
+
+TIP: Sollte ein korrigiertes Element durch eine neue Elementauswahl überschrieben werden, erfolgt ein Hinweis.
+
+=== Separates Inhaltefenster
+
+Bei den Prozduren ist es gelegentlich notwendig mehrere Prozeduren gemeinsam zu analysieren. Wird bei der Elementauswahl gleichzeitig die STRG-Taste gedrückt, wird das Element in einem separaten Fenster angezeigt. Folgende Anwahlen werden in Registerform angezeigt:
+
+image:inh_sep.png[]
+
+Die Sendetaste befindet sich unten rechts.
+
+TIP: Die linke Maus gedrückt und positioniert über der Registerlasche 
+wird das Register gelöscht.
+
+== Widgetbaum
+
+Im Auswahlfenster wird der Widgetbaum angezeigt, er zeigt alle Widget und ihre Beziehung zueinander:
+
+image:widgettree.png[]
+
+Unterhalb des Baums werden die _Optionen_ des selektierten Widgets angezeigt. Die Wertespalte in der Tabelle ist änderbar. Über die _Sendetaste_ können die geänderten Optionen zum Testling geschickt werden.
+
+TIP: Mit der rechten Maustaste und der Tastenkombination Shift-STRG-Alt lässt sich ein Widget in der grafischen Oberfläche des Testlings selektieren.
+
+Neben den Widgetoptionen lassen sich über die Radiotasten oberhalb des Widgetbaums weiter Widgetinformationen anzeigen und ändern. 
+
+=== Popup-Funktionen
+
+Über ein Popup-Menu im Widgetbaum lassen sich widgetspezifische Funktionen aufrufen:
+
+image:widgetpopup.png[]
+
+*Lupe*
+
+Es wird nur der Widgetbaum des selektierten Widgets angezeigt.
+
+*Set Widget*
+
+Dem Widget wird der _Aliasname_ *xyz* zugewiesen. Dieser kann in der Kommandofunktion verwendet werden. 
+
+  $xyz configure -background
+  
+*TagInfo MarkInfo*
+
+Bei Textwidgets wird eine Liste der aktuellen Tags bzw. Markern  ausgegeben. Beim Mausklick auf ein Tag oder Marker wird im Testling die Postion angezeigt.
+
+image:taginfo.png[]
+
+TIP: In der Tagliste kann die Konfiguration eines Tag geändert werden.
+
+=== Callback-Info
+
+Die Funktion _Callback-Info_ listet im Testling die Callback-Prozeduren
+auf, die einem Widget zugeordnet ist.
+
+*So geht's:*
+
+Im Testling wird mit der Tastenkombination
+_Ctrl-Shift-Button2_ ein Widget angeklickt. Darauf sendet der Testling
+Informationen an den Inspector zur Anzeige. Zusätzlich wird
+im Inspector im Register _Proc_ nach der Callbackinformation
+gesucht.
+
+Im Testling können Widgets wie _Button, Combobox und Checkbutton_
+selektiert werden, die die Option _-command_ enthalten könnten.
+
+Außerdem wird beim selektierten Widget nach einer _Bind_-Anweisung
+gesucht. Die ist i.a. beim _Entry-Widget_ gegeben.
+
+Bei _Menueinträgen_ wird ebenfalls nach der Option -command
+gesucht.
+====
+TIP: zur Auswahl von Menueinträgen ist zuvor im Menu oder
+Popup-Menu der gewünschte Eintrag anzuzeigen und dann mit
+Ctrl-Shift-Button2 zu selektieren.
+====
+
+== Trace Funktionen
+
+Dynamische Tracepunkte werden interaktiv vom inspector im Testling eingetragen.
+
+Eine Procedur wird über die _Proc-Liste_ gesucht und ausgewählt. In der Quelle Im Inhaltefenster wird die zu tracende Variable markiert und das Popup-Menu aufgerufen.
+
+Das Popup-Menu bietet verschiedene Funktionen:
+====
+- Tracepunkte ...
+- Debug puts ...
+====
+
+Für jede Funktion kann die Ausgabeart gewählt werden:
+====
+- Variable (Ausgabe der Variable)
+- Liste (Ausgabe der Variable in Listenform)
+- proctrace (Ausgabe der Aufrufparameter der Procedur)
+====
+
+=== Tracepunkte ...
+Diese Funktion übernimmt eine Variable in die Tracepunktliste.
+Alle gesetzten Tracepunkte können in der Tabelle _Tracepunkt-Info_ angezeigt und temporär inaktiviert werden:
+
+.Tracepunktinfo
+image::tracepunktinfo.png[]
+
+Nach Durchlaufen der Procedur im Testling werden die Tracedaten angezeigt:
+
+.Tracepunktausgabe
+image::tracepunkte.png[]
+
+
+
+=== Debug puts ...
+
+Alternativ zur Ausgabe im Tracepunkt-Fenster werden hier die Traceausgaben einer Variable direkt nach _stdout_ geschrieben. Der Tracepunkt wird nicht in der obigen Tracepunktliste geführt.
+
+NOTE: Nicht vergessen: die geänderte Quelle zum Testling schicken.
+
+== Trace von globalen Daten und Proceduren
+
+Im _Global_-Register kann mit dem Popup-Menu das _Tracemenu_ angezeigt werden.
+Je nach Bedarf können die Optionen
+
+ read write unset
+ 
+gesetzt werden. Im Eingabefeld wird der Variablenname gesetzt:
+====
+- ::aktLog  
+- ::utils::export::zip  
+- ::gd(server)
+- ::gd
+====
+Im letzten Fall ist die Option _array_ notwendig.
+
+
+Im _Proc_-Register können Proceduren beim Ein- und Austritt getraced werden.
+
+
+== Canvas Funktionen
+
+
+Die Tabelle _Canvas_ listet alle Canvas-Widgets des Testlings. Nach Auswahl eines Canvas-Widgets werden unterhalb der Liste zwei Tabellen angzeigt:
+
+image:canvas_auswahl.png[]
+
+links: *Tag-Tabelle:*
+
+zeigt alle _Tags_ des gewählten Widgets. Die Spalte _IDS_ listet alle IDs  dieses Tags.
+
+rechts: *ID-Tabelle:*
+
+zeigt alle _IDs_ des gewählten Widgets. Die Spalte _Tags_ zeigt auf alle Tags dieser ID.
+
+=== ID- und Tag-Baum
+Die Funktion wird im Popup-Menu in der Canvas-Liste angewählt.
+Es wird ein Fenster mit zwei Bäumen angezeigt.
+
+image:canvas_baum.png[]
+
+Der _Tagbaum_ auf der linken Seite zeigt alle vorhandenen _Tags_.
+Der Tagknoten enthält alle IDs mit gleichem Tagnamen.
+
+Der _ID-Baum_ auf der rechten Seite zeigt alle vorhandenen _IDs_.
+Der ID-Knoten enthält alle Tags mit gleichem ID.
+
+
+=== ID im Baum selektieren
+
+Wenn im angezeigten Baum auf einen Tag oder eine ID geklickt oder in den Tabellen, wird im Canvas die zugehörende ID kurz farblich
+verändert.
+
+=== Konfiguration von ID/Tag
+
+Über die PopupFunktion in den beiden Bäumen oder Tabellen kann die
+Konfiguration der selektierten ID oder Tag angezeigt werden.
+Über die _Senden_-Taste unten rechts kann die Konfiguration
+geändert werden:
+
+image:canvas_konf.png[]
+
+=== IDs mit der Maus im Canvas auswählen
+
+Die Start-Funktion wird im Popup-Menu in der Canvas-Liste angewählt.
+
+Die Maus im Canvas bewegen. Dabei wird die aktuelle
+Canvas-ID farblich geändert und in einem Tooltip die
+
+====
+- ID-Nummer
+- Typ
+- und alle Tags
+====
+angezeigt.
+
+Beim Verlassen (Leave) wird die Farbe restauriert und der Tooltip
+gelöscht.
+
+Bei den Typen _window_ und _image_ kann die Farbe nicht geändert
+werden.
+
+Zuletzt wird mit der _Stop-Funktion_ die Bedienung beendet.
+
+=== IDs im Rechteck im Canvas auswählen
+
+Die Funktion wird im Popup-Menu in der Canvas-Liste angewählt.
+
+Mit gedrückter Maustaste wird im Canvas ein Rechteck erzeugt.
+Alle IDs innerhalb werden mit _Typ_ und _Tags_ in einem
+Notizfenster angezeigt. Das Fenster verschwindet mit dem
+Quittieren. Das Rechteck bleibt erhalten.
+
+Wenn ein neues Rechteck erzeugt wird, wird das vorherige
+Rechteck gelöscht.
+
+Mit der Abwahl der Funktion (Stop) wird das letzte
+Rechteck gelöscht.
+
+== Quellen und Prozeduren
+
+Das Register _Quelle_ listet alle Quellen des Programms.
+Durch Klick in die Liste wird die gewählte Quelle angezeigt.
+Über das PopupMenu kann eine Liste mit allen Prozeduren dieser Quelle angezeigt werden. Aus dieser Liste kann auf eine Prozedur in der Quelle positioniert werden.
+
+Die Suche nach einer Procedur im Register _Proc_ endet ohne Ergebnis, wenn die zugeordnete Quelle im bisherigen Programmablauf noch nicht durchlaufen wurde. Über die Popup-Funktion _Source_ im Register Quelle kann das nachgeholt werden.
+
+== Sonstiges
+
+=== Systemkonzept
+
+Der inspector kommuniziert mit dem Testling _asynchron_. Die Antwort des Testlings wird _zeitüberwacht_, die _Wartezeit_ ist auf 3 Sekunden eingestellt und kann auf der grafischen Oberfläche geändert werden.
+
+=== bin-Verzeichnis
+
+Im bin-Verzeichnis in den inspector-Quellen sind Programme vorhanden, die vom inspector aufgerufen werden.
+
+Dazu ist das Verzeichnis in der Umgebungsvariable PATH einzutragen.
+
+=== kit-Programm
+
+Das Verzeichnislayout der inspector-Quellen ist _kit-geignet_, d.h. mit dem Programm _sdx_ kann ein tclkit erzeugt werden:
+
+   sdx wrap inspector.kit -vfs ../inspector.vfs
+
+
+zuvor muss man in das bin-Verzeichnis wechseln.
+
+Ein kit-Programm kann gestartet werden:
+
+- wish inspector.kit
+- tclkit inspector.kit
+- ./inspector.kit , sofern tclkit vorhanden ist
+
+=== tkdnd package
+
+Das tkdnd-package muss im verwendeten Betriebssystem übersetzt werden, die Quellen liegen unter _github.com/petasis/tkdnd_.
+
+Im lib-Verzeichnis des inspectors sind Binärobjekte für
+
+- linux-x86_64
+- solaris-ix86
+- solaris-x86_64
+
+enthalten.
+
+Ist das passende tkdnd-Objekt nicht vorhanden, läuft der inspector eingeschränkt ohne die erwähnten dnd-Funktionen.
+
+   
