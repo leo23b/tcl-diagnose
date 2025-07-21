@@ -1,0 +1,17 @@
+#
+# Änderungen von mlrd
+#
+
+# 29.11.21 1.9.14-2
+    - 1.9.14 von sourceforge übernommen
+    - geänderte Quellen
+      - bitmap.tcl : png ergänzt
+      - combobox : 
+          - bg red wenn kein Text
+          
+      - notebook 
+        - bg activ Tab
+      -2  
+      - panedwindow : sash bg blue
+      
+        
