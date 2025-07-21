@@ -1,0 +1,24 @@
+#!/usr/bin/env tclkit
+set tcl_patchLevel
+package require Tk 8.6
+proc fontchooserDemo {} {
+    wm title . "Font Chooser Demo"
+    wm withdraw .
+    tk fontchooser configure -parent . \
+      -command [list fontchooserFontSelection .]
+    tk fontchooser show  
+    wm protocol .__tk__fontchooser WM_DELETE_WINDOW Exit
+}
+proc fontchooserFontSelection {w font args} {
+    puts $font
+   exit
+}
+proc Exit {} {
+
+  puts ""
+  exit
+}
+fontchooserDemo
+.__tk__fontchooser.cancel configure -state disabled
+.__tk__fontchooser.apply  configure -state disabled
+
