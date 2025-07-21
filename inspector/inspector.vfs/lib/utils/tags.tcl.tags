@@ -1,0 +1,282 @@
+# format=pipe
+$newWidget||{args}|
+Draw||{parent}|
+MakecalendarWid||{args}|
+_nooctal||{zi}|
+balloon_dn||{wname}|
+balloon_show||{wname}|
+cal_build_month||{ month year }|
+cal_list_month||{ month year {startsunday 1}|
+cal_month_length||{ monthvar yearvar }|
+cal_start_weekday||{ month year }|
+callback||{parent col row}|
+calproc||{parent args}|
+calwid||{args}|
+enter_proc||{wname}|
+leave_proc||{wname}|
+roll_left||{listvar {rollby 1}|
+update_cal||{parent}|
+::utils::_chooseMime||{pf}|
+::utils::_fileToMime||{pf name mimeType}|
+::utils::_multiPartMime||{args}|
+::utils::_textToMime||{text cs}|
+::utils::dictget||{dict args}|
+::utils::dicttomat||{d matVar keys}|
+::utils::dolog||{logFile display spusName typ msgP}|
+::utils::dostat||{datei display spusName args}|
+::utils::getCfgKey||{key prg}|
+::utils::getCfgKeyU||{key user prg}|
+::utils::incrChar||{c}|
+::utils::ldelete||{liste idxliste }|
+::utils::lremove||{liste wert }|
+::utils::matrixtostring||{matrix {sepc {;}|
+::utils::matrixtranspose||{_M}|
+::utils::nooctal||{zi}|
+::utils::oneblank||{str}|
+::utils::printdict||{ d {i 0}|
+::utils::printdictkeys||{ d {i 0}|
+::utils::printdictstring||{ d {i 0}|
+::utils::printliste||{liste {name {}|
+::utils::printlistestring||{liste {name {}|
+::utils::range||{from to {step 1}|
+::utils::readCfg||{prg}|
+::utils::readCfgU||{user prg}|
+::utils::saveCfg||{prg top cfgvarsPf}|
+::utils::saveCfgU||{user prg top cfgvarsPf {nosync {0}|
+::utils::sendmail||{args}|
+::utils::sliceliste||{liste anz}|
+::utils::splitfix||{str len}|
+::utils::splitstring||{str}|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+debuginfo||{}|
+::utils::drucken::druckDialog||{ p input args }|
+::utils::drucken::exportDialog||{ p input args }|
+_dbg||{num titel {script {}|
+_getfiletypes||{namen typen}|
+_proctrace||{}|
+_resulttrace||{msg}|
+_ueberschrift||{title labels widths anzPages pageNo}|
+cbDrucken||{p dlg input}|
+cbExport||{p dlg input}|
+formLine||{widths values sepC}|
+formatList||{liste tbl title lpp noTitle sepC}|
+formatTab||{tab title lpp noTitle sepC}|
+formatTbl||{tbl title lpp noTitle sepC}|
+getFile||{title typ}|
+listToString||{liste sepc}|
+mailexport||{txt emailadr zip crlf attname attext}|
+popupMsg||{icon title msg parent}|
+setClock||{onoff w1}|
+::utils::gui::Spaltenanzeige||{tbl z }|
+::utils::gui::TblColInit||{tbl td}|
+::utils::gui::TblGetZS||{tbl x y}|
+::utils::gui::TooltipAddCmd||{tbl row col}|
+::utils::gui::_elb_ReturnEntry||{lb en event1 cb1}|
+::utils::gui::_elb_lbPosition||{lb en}|
+::utils::gui::_setScroll||{sbar args}|
+::utils::gui::_synchScroll||{widgets args}|
+::utils::gui::bitteWarten||{p fkt {txt {}|
+::utils::gui::centerWindow||{parent me  }|
+::utils::gui::ic||{size name}|
+::utils::gui::mkButton||{W p name args}|
+::utils::gui::mkComboBox||{W p name args}|
+::utils::gui::mkEntry||{W p name args}|
+::utils::gui::mkEntryListBox||{W p name args}|
+::utils::gui::mkLabel||{W p name args}|
+::utils::gui::mkLabelEntry||{W p name args}|
+::utils::gui::mkListBox||{W p name args}|
+::utils::gui::mkNBvertikal||{W p args}|
+::utils::gui::mkNoteBook||{W p name args}|
+::utils::gui::mkPagesManager||{W p name args}|
+::utils::gui::mkPanedWindow||{W p name args}|
+::utils::gui::mkTButton||{W p name args}|
+::utils::gui::mkTable||{W p name args}|
+::utils::gui::mkTabular||{W p name args}|
+::utils::gui::mkText||{W p name args}|
+::utils::gui::msg||{icon title msg {parent {.}|
+::utils::gui::popupTblMuster||{tbl_body x y}|
+::utils::gui::selectColor||{p col {title {}|
+::utils::gui::setClock||{ onoff w1 }|
+::utils::gui::synchScroll||{wid1 wid2 sbar1 sbar2 richtung}|
+::utils::gui::topNix||{W p name args}|
+::utils::gui::topTablelist||{W p name args}|
+::utils::gui::topText||{W p name args}|
+::utils::gui::xmkIcons||{W dir pat}|
+NBvertikalSelectVH||{lb pm idx}|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+checkName||{W name}|
+debuginfo||{}|
+::utils::file::appendfile||{pfad str}|
+::utils::file::cleandir||{dir wc tage}|
+::utils::file::crlf||{pfStr}|
+::utils::file::deleteallvers||{pfad}|
+::utils::file::getappendfile||{args}|
+::utils::file::getdirectory||{args}|
+::utils::file::getopenfile||{args}|
+::utils::file::getsavefile||{args}|
+::utils::file::readfile||{pfad args}|
+::utils::file::readliste||{pfad args}|
+::utils::file::remcopy||{quelle remhost ziel }|
+::utils::file::rglob||{dirlist globlist}|
+::utils::file::setprotVMS||{pfad prot}|
+::utils::file::sftp||{user pw host qu z}|
+::utils::file::ssh_expect||{pw kdo args}|
+::utils::file::tmpexe||{ fos }|
+::utils::file::tmpname||{{name {tmp}|
+::utils::file::writefile||{pfad str}|
+::utils::file::writeliste||{pfad liste}|
+::utils::file::writetmp||{str {name {tmp}|
+::utils::file::zip||{pf zipargs}|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+debuginfo||{}|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+_select||{sqlcmd args}|
+_splitOraExport||{str}|
+debuginfo||{}|
+execOraWrap||{sqlcmd}|
+export||{args}|
+pageSelect||{sqlcmd args}|
+parseSelectCMD||{cmd}|
+resultColumns||{namen api {sepc {|}|
+select||{args}|
+sqlite||{sqlcmd args}|
+sqliteShellAPI||{dbpf sqlcmd}|
+sqliteTclAPI||{dbtoken sqlcmd }|
+xx||{nr}|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+align||{tab col_desc}|
+anzSpalten||{w }|
+anzZeilen||{w }|
+clearSel||{tab}|
+debuginfo||{}|
+delSpalten||{tab spalte {anzahl {1}|
+delZeilen||{tab zeile {anzahl {1}|
+fields||{tab namen typen {comments {}|
+getAlleZeilen||{tab}|
+getLabels||{tab}|
+getSpalten||{w von {bis {end}|
+getWidth||{tab col }|
+getZS||{w x y}|
+getZeilen||{w von {bis {end}|
+insertListe||{tab liste {titel {}|
+newTab||{p}|
+selCells||{tab}|
+selZeilen||{tab}|
+status||{p tab}|
+xxgetAlleZeilen||{tab}|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+_select||{sqlcmd args}|
+_splitOraExport||{str}|
+debuginfo||{}|
+execOraWrap||{sqlcmd}|
+export||{args}|
+pageSelect||{sqlcmd args}|
+parseSelectCMD||{cmd}|
+resultColumns||{namen api {sepc {|}|
+select||{args}|
+sqlite||{sqlcmd args}|
+sqliteShellAPI||{dbpf sqlcmd}|
+sqliteTclAPI||{dbtoken sqlcmd }|
+xx||{nr}|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+debuginfo||{}|
+xx||{nr}|
+_cal_cb||{caltop entry_w args}|
+_dbg||{num titel {script {}|
+_decrementMonth||{ cal   }|
+_decrementYear||{ cal   }|
+_incrementMonth||{ cal   }|
+_incrementYear||{ cal   }|
+_proctrace||{}|
+_resulttrace||{msg}|
+_setMonthYear||{ cal }|
+debuginfo||{}|
+utils::dz::_show_calender||{w entry_w}|
+utils::dz::checkDatum||{datS args}|
+utils::dz::checkZeit||{zeit args}|
+utils::dz::datum+||{datum tage {sepC {.}|
+utils::dz::datum-||{datum tage {sepC {.}|
+utils::dz::dsp_calender||{p e}|
+utils::dz::gestern||{{sepC {.}|
+utils::dz::heute||{{sepC {.}|
+utils::dz::incrDatum||{datum_var einh anz richtung}|
+utils::dz::jetzt||{  }|
+utils::dz::minRunden||{hhmmss}|
+utils::dz::morgen||{{sepC {.}|
+utils::dz::nachJMT||{tmj {sepC {.}|
+utils::dz::nachMTJ||{tmj {sepC {\/}|
+utils::dz::nachTMJ||{mtj {sepC {.}|
+utils::dz::puts_dauer||{zanf {txt {}|
+utils::dz::relDat||{relDatum}|
+utils::dz::scan_zp||{datum zeit}|
+utils::dz::splitDatum||{tmj vt vm vj args}|
+utils::dz::splitZeit||{zeit vh vm vs args}|
+utils::dz::tagAbstand||{von bis}|
+utils::dz::tagStunden||{datum}|
+utils::dz::tageListe||{von bis args}|
+utils::dz::vergTage||{mon jhr}|
+utils::dz::woTag||{datum}|
+debug||{nr pkg titel {script {}|
+debugstring||{nr pkg titel {msg {}|
+log||{nr pkg titel {script {}|
+::utils::tabfs||{win args}|
+::utils::tabfs::_allentries||{win funt spalten}|
+::utils::tabfs::_cbToggleBg||{win entr chkVar}|
+::utils::tabfs::_copyFilter||{win}|
+::utils::tabfs::_createChkBt||{win check args}|
+::utils::tabfs::_destroy||{win dWin}|
+::utils::tabfs::_entry||{win fr name sf len nr}|
+::utils::tabfs::_fillCbox||{win cbox table spalte}|
+::utils::tabfs::_filterDok||{win}|
+::utils::tabfs::_getAr||{win suffix name}|
+::utils::tabfs::_getColTooltip||{win table}|
+::utils::tabfs::_getFilter||{win}|
+::utils::tabfs::_lastFilter||{win }|
+::utils::tabfs::_page+-||{win vz}|
+::utils::tabfs::_parseCfg||{win}|
+::utils::tabfs::_parseEntries||{win}|
+::utils::tabfs::_parseReportselect||{win}|
+::utils::tabfs::_pasteFilter||{win {filter {}|
+::utils::tabfs::_qname||{name namen qnamen}|
+::utils::tabfs::_selectZeile||{win tbl spalten}|
+::utils::tabfs::_spAuswahlAnwenden||{win tbl dlg}|
+::utils::tabfs::_spAuswahlCopy||{win tbl dlg}|
+::utils::tabfs::_spAuswahlDialog||{win}|
+::utils::tabfs::_spAuswahlDok||{win}|
+::utils::tabfs::_spAuswahlGet||{win tbl dlg}|
+::utils::tabfs::_spAuswahlPaste||{win tbl dlg}|
+::utils::tabfs::_spAuswahlReset||{win tbl}|
+::utils::tabfs::_spAuswahlSet||{win tbl mode row}|
+::utils::tabfs::_spaltenAusTd||{td}|
+::utils::tabfs::_tdAusSpalten||{td spalten}|
+::utils::tabfs::instanceCmd||{self cmd args}|
+::utils::tabfs::query||{win args}|
+::utils::tabfs::queryReset||{win }|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+debuginfo||{}|
+::utils::suchen::findDialog||{ p inp }|
+_dbg||{num titel {script {}|
+_proctrace||{}|
+_resulttrace||{msg}|
+cbFinden||{ inp }|
+cbFindenLB||{ inp }|
+clearEntry||{ entry }|
+debuginfo||{}|
+paste||{entry}|
+
